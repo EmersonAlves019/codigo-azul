@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
     })
 
     if(!session) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
+        return NextResponse.redirect(new URL("auth/login", request.url));
     }
 
     return NextResponse.next();
@@ -16,5 +16,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   runtime: "nodejs",
-  matcher: ["/((?!auth/login|auth/register).*)"], 
+  matcher: [
+    "/dashboard",
+    "/welcome",
+    "/daily",
+    "/journey",
+    "/personalization",
+    "/pillars",
+    "/progress",
+  ], 
 };
