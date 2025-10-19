@@ -13,7 +13,7 @@ import { usePersonalization } from '@/hooks/usePersonalization'
 interface DayTask {
   id: string
   label: string
-  icon: any
+  icon: React.ElementType
   completed: boolean
 }
 
@@ -74,7 +74,6 @@ export default function Journey() {
   }, [personalization])
 
   const getDayTips = () => {
-    const week = Math.ceil(currentDay / 7)
     const baseTips = [
       {
         day: 1,

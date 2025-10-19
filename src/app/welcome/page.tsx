@@ -111,7 +111,7 @@ export default function Welcome() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-8">Baseado no método "O Código Azul"</p>
+        <p className="text-center text-xs text-muted-foreground mt-8">Baseado no método &quot;O Código Azul&quot;</p>
       </div>
     </div>
   )

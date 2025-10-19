@@ -18,14 +18,12 @@ import { Spinner } from '@/components/ui/spinner'
 import {
   Sparkles,
   Heart,
-  Droplet,
   Eye,
   EyeOff,
   Mail,
   Lock,
   User,
   ArrowRight,
-  Calendar,
   TrendingUp,
   BookOpen,
   Target,
@@ -243,7 +241,7 @@ export function SignupForm() {
               </div>
               <h2 className="text-2xl font-bold text-primary mb-2">Transforme sua vida em 30 dias!</h2>
               <p className="text-muted-foreground">
-                Junte-se a milhares de pessoas que já descobriram o poder do método "O Código Azul".
+                Junte-se a milhares de pessoas que já descobriram o poder do método &quot;O Código Azul&quot;.
               </p>
             </div>
 
@@ -285,7 +283,7 @@ export function SignupForm() {
             {/* Motivational Message */}
             <div className="text-center p-4 rounded-xl gradient-azure">
               <Sparkles className="w-6 h-6 text-primary mx-auto mb-2" />
-              <p className="text-sm font-medium text-primary">"Sua transformação começa hoje"</p>
+              <p className="text-sm font-medium text-primary">&quot;Sua transformação começa hoje&quot;</p>
             </div>
           </Card>
         </div>

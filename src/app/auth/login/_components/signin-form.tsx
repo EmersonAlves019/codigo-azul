@@ -19,7 +19,6 @@ import { Separator } from '@/components/ui/separator'
 import {
   Sparkles,
   Heart,
-  Droplet,
   Eye,
   EyeOff,
   Mail,
@@ -281,7 +280,9 @@ export function SigninForm() {
             {/* Motivational Message */}
             <div className="text-center p-4 rounded-xl gradient-azure">
               <Sparkles className="w-6 h-6 text-primary mx-auto mb-2" />
-              <p className="text-sm font-medium text-primary">"Cada pequeno passo conta na sua transformação"</p>
+              <p className="text-sm font-medium text-primary">
+                &quot;Cada pequeno passo conta na sua transformação&quot;
+              </p>
             </div>
           </Card>
         </div>

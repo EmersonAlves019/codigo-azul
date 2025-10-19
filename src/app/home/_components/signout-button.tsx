@@ -16,7 +16,7 @@ export function SignoutButton() {
         description: 'Obrigado por usar nossa plataforma',
       })
       router.push('/auth/login')
-    } catch (error) {
+    } catch {
       toast.error('Erro ao fazer logout', {
         description: 'Tente novamente',
       })
