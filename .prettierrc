@@ -1,0 +1,20 @@
+{
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "avoid",
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "tabWidth": 2,
+    "useTabs": false,
+    "printWidth": 120,
+    "quoteProps": "as-needed",
+    "importOrder": [
+        "^react",
+        "<THIRD_PARTY_MODULES>",
+        "^@/(.*)$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+}
