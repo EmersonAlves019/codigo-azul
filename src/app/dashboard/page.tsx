@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Calendar, TrendingUp, BookOpen, Sparkles, Target, Heart, Sun } from 'lucide-react'
 import { Card } from '@/components/ui/card'
-import { SignoutButton } from '@/app/home/_components/signout-button'
+import { SignoutButton } from '@/app/dashboard/_components/signout-button'
 import { useAuth } from '@/hooks/useAuth'
 
 interface UserData {
