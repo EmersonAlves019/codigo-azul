@@ -120,3 +120,104 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Custom gradient backgrounds */
+  .gradient-calm {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  }
+  
+  .gradient-azure {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  }
+  
+  .gradient-energy {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  }
+  
+  /* Custom shadows */
+  .shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .shadow-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .shadow-float {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Custom animations */
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+  
+  .animate-bloom {
+    animation: bloom 0.8s ease-out;
+  }
+  
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Custom color variants */
+  .text-secondary-dark {
+    color: #1e40af;
+  }
+  
+  .text-accent-vibrant {
+    color: #3b82f6;
+  }
+  
+  .text-primary-light {
+    color: #60a5fa;
+  }
+  
+  .bg-primary-lighter\/50 {
+    background-color: rgba(147, 197, 253, 0.5);
+  }
+  
+  .bg-primary-light\/20 {
+    background-color: rgba(147, 197, 253, 0.2);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bloom {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
