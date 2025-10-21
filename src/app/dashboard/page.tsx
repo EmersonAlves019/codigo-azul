@@ -8,6 +8,8 @@ import { Calendar, TrendingUp, BookOpen, Sparkles, Target, Heart, Sun } from 'lu
 import { Card } from '@/components/ui/card'
 import { SignoutButton } from '@/app/dashboard/_components/signout-button'
 import { useAuth } from '@/hooks/useAuth'
+import { useGetPhrase } from '@/services/motivational-phrases/queries/use-get-phrase'
+import { Loading } from '@/components/ui/loading'
 
 interface UserData {
   name: string
@@ -16,22 +18,13 @@ interface UserData {
   startDate: string
 }
 
-const motivationalPhrases = [
-  'Você está mais perto do que imagina!',
-  'Cada pequeno passo conta 💙',
-  'Sua consistência está transformando sua vida',
-  'Você merece essa transformação',
-  'A mudança começa de dentro para fora',
-  'Celebre cada vitória, por menor que seja',
-]
-
 export default function Dashboard() {
   const router = useRouter()
   const { user: authUser, loading } = useAuth()
   const [user, setUser] = useState<UserData | null>(null)
   const [currentDay, setCurrentDay] = useState(1)
   const [completedDays, setCompletedDays] = useState(0)
-  const [dailyPhrase, setDailyPhrase] = useState('')
+  const { data: dailyPhrase, isLoading: isLoadingPhrase } = useGetPhrase()
 
   useEffect(() => {
     if (loading) return
@@ -48,10 +41,6 @@ export default function Dashboard() {
     }
 
     setUser(JSON.parse(userData))
-
-    // Definir frase aleatória do dia
-    const randomPhrase = motivationalPhrases[Math.floor(Math.random() * motivationalPhrases.length)]
-    setDailyPhrase(randomPhrase)
 
     // Calcular progresso
     const progress = localStorage.getItem('journeyProgress')
@@ -116,7 +105,7 @@ export default function Dashboard() {
             <Sparkles className="w-6 h-6 text-primary mt-1 animate-pulse-soft" />
             <div>
               <p className="text-sm font-medium text-primary mb-1">Mensagem do Dia</p>
-              <p className="text-lg font-semibold text-primary-foreground">{dailyPhrase}</p>
+              <p className="text-lg font-semibold text-primary">{isLoadingPhrase ? <Loading /> : dailyPhrase}</p>
             </div>
           </div>
         </div>
