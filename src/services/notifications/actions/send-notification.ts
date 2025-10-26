@@ -1,6 +1,6 @@
 'use server'
 
-import admin from '@/lib/firebase/admin-config'
+import { initializeFirebase } from '@/lib/firebase/admin-config'
 import { getAuthenticatedUser } from '@/lib/auth-utils'
 import { prisma } from '@/lib/prisma-client'
 import type { SendNotificationPayload } from '../types'
@@ -11,6 +11,7 @@ export async function sendNotification(
 ) {
   try {
     const currentUserId = await getAuthenticatedUser()
+    const admin = initializeFirebase()
 
     // For now, only allow users to send to themselves
     // In production, you might want admin-only access

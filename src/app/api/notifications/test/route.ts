@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma-client'
-import admin from '@/lib/firebase/admin-config'
+import { initializeFirebase } from '@/lib/firebase/admin-config'
 import { getAuthenticatedUserFromRequest } from '@/lib/api-utils'
 
 export async function POST(request: Request) {
   try {
+    // Initialize Firebase Admin if not already initialized
+    const admin = initializeFirebase()
+    
     const userId = await getAuthenticatedUserFromRequest()
 
     const body = await request.json()

@@ -1,5 +1,5 @@
 import cron, { ScheduledTask } from 'node-cron'
-import admin from '@/lib/firebase/admin-config'
+import { initializeFirebase } from '@/lib/firebase/admin-config'
 import { prisma } from '@/lib/prisma-client'
 
 // Store cron tasks
@@ -35,6 +35,8 @@ export function scheduleNotification(
 
 export async function sendDailyTaskNotifications() {
   try {
+    const admin = initializeFirebase()
+    
     // Get current date in user timezone
     const now = new Date()
     const currentHour = now.getHours()
@@ -108,6 +110,8 @@ export async function sendMotivationalNotification(
   userId: string
 ) {
   try {
+    const admin = initializeFirebase()
+    
     const subscriptions = await prisma.pushSubscription.findMany({
       where: {
         userId,
