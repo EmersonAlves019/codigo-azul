@@ -9,13 +9,20 @@ function initializeFirebase() {
     return admin
   }
 
+  const credentialsPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH
+  
+  if (!credentialsPath) {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY_PATH environment variable is not set')
+  }
+
   let credential
 
   try {
-    const serviceAccount = JSON.parse(readFileSync(process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH || '', 'utf8'))
+    const serviceAccount = JSON.parse(readFileSync(credentialsPath, 'utf8'))
     credential = admin.credential.cert(serviceAccount)
-  } catch {
-    throw new Error('Firebase credentials not found. Either provide service-account-key.json or set FIREBASE_PRIVATE_KEY, FIREBASE_PROJECT_ID, and FIREBASE_CLIENT_EMAIL environment variables.')
+  } catch (error) {
+    console.error('Failed to load Firebase service account from:', credentialsPath)
+    throw new Error(`Failed to load Firebase credentials from ${credentialsPath}. ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 
   try {

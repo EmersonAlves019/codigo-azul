@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 /src/db/generated/prisma
+
+# Firebase credentials
+*service-account-key.json
+firebase-*.json
