@@ -1,4 +1,5 @@
 import admin from 'firebase-admin'
+import { readFileSync } from 'fs'
 
 
 let initialized = false
@@ -11,7 +12,7 @@ function initializeFirebase() {
   let credential
 
   try {
-    const serviceAccount =  require('./service-account-key.json')
+    const serviceAccount = JSON.parse(readFileSync(process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH || '', 'utf8'))
     credential = admin.credential.cert(serviceAccount)
   } catch {
     throw new Error('Firebase credentials not found. Either provide service-account-key.json or set FIREBASE_PRIVATE_KEY, FIREBASE_PROJECT_ID, and FIREBASE_CLIENT_EMAIL environment variables.')
