@@ -65,7 +65,7 @@ export function SubscribeButton({ variant = 'default', size = 'default', classNa
       } else {
         toast.error(result.error || 'Falha ao ativar notificações')
       }
-    } catch (error) {
+    } catch {
       toast.error('Erro ao ativar notificações')
     } finally {
       setIsLoading(false)

@@ -30,11 +30,10 @@ export async function withAuth(
 
 /**
  * Obtém o ID do usuário autenticado de uma requisição
- * @param {Request} request Requisição HTTP
  * @returns {Promise<string>} ID do usuário autenticado
  * @throws {Error} Se o usuário não estiver autenticado
  */
-export async function getAuthenticatedUserFromRequest(request?: Request): Promise<string> {
+export async function getAuthenticatedUserFromRequest(): Promise<string> {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
