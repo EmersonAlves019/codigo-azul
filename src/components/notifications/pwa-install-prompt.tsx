@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { X } from 'lucide-react'
+import { X, Download, Smartphone } from 'lucide-react'
+import { usePWAInstall } from './pwa-install-provider'
+import { IosInstallGuide } from './ios-install-guide'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
@@ -14,16 +16,12 @@ export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [isInstalled, setIsInstalled] = useState(false)
   const [isHidden, setIsHidden] = useState(false)
+  const { isStandalone, isIOS, showInstallGuide, setShowInstallGuide } = usePWAInstall()
 
   useEffect(() => {
-    // Check if app is already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
-    const isInWebAppiOS = ('standalone' in window.navigator) && (window.navigator as unknown as { standalone: boolean }).standalone === true
-    const isInWebAppChrome = window.matchMedia('(display-mode: standalone)').matches
+    setIsInstalled(isStandalone)
 
-    setIsInstalled(isStandalone || isInWebAppiOS || isInWebAppChrome)
-
-    // Listen for install prompt
+    // Listen for install prompt (Android/Chrome)
     const handler = (e: Event) => {
       e.preventDefault()
       setDeferredPrompt(e as BeforeInstallPromptEvent)
@@ -40,17 +38,22 @@ export function PWAInstallPrompt() {
     return () => {
       window.removeEventListener('beforeinstallprompt', handler)
     }
-  }, [])
+  }, [isStandalone])
 
   const handleInstall = async () => {
     if (!deferredPrompt) return
 
-    const { outcome } = await deferredPrompt.userChoice
-    console.log(`User response to install prompt: ${outcome}`)
-    setDeferredPrompt(null)
+    try {
+      await deferredPrompt.prompt()
+      const { outcome } = await deferredPrompt.userChoice
+      console.log(`User response to install prompt: ${outcome}`)
+      setDeferredPrompt(null)
 
-    if (outcome === 'accepted') {
-      setIsInstalled(true)
+      if (outcome === 'accepted') {
+        setIsInstalled(true)
+      }
+    } catch (error) {
+      console.error('Error showing install prompt:', error)
     }
   }
 
@@ -59,33 +62,66 @@ export function PWAInstallPrompt() {
     localStorage.setItem('pwa-install-dismissed', 'true')
   }
 
+  const handleiOSGuideClose = () => {
+    localStorage.setItem('ios-install-guide-shown', 'true')
+    setShowInstallGuide(false)
+  }
+
+  // Se for iOS e não instalado, mostrar iOS guide
+  if (isIOS && !isInstalled && showInstallGuide) {
+    const IOSGuide = IosInstallGuide as React.FC<{ isOpen: boolean; onClose: () => void }>
+    return <IOSGuide isOpen={showInstallGuide} onClose={handleiOSGuideClose} />
+  }
+
+  // Android/Desktop install prompt
   if (isInstalled || isHidden || !deferredPrompt) {
     return null
   }
 
+  const onboardingCompleted = localStorage.getItem('onboarding-completed')
+
+  // Só mostrar após onboarding completo
+  if (!onboardingCompleted) {
+    return null
+  }
+
   return (
-    <Card className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-96 shadow-lg">
+    <Card className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-96 shadow-float">
       <CardHeader>
-        <div className="flex items-start justify-between">
-          <div>
-            <CardTitle>Instalar App</CardTitle>
-            <CardDescription>Instale o app para acesso rápido e experiência melhor</CardDescription>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-3 flex-1">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+              <Download className="w-6 h-6 text-primary-foreground" />
+            </div>
+            <div>
+              <CardTitle className="text-lg">Instalar App</CardTitle>
+              <CardDescription className="text-sm">Acesso rápido e experiência melhor</CardDescription>
+            </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={handleDismiss} className="h-6 w-6">
+          <Button variant="ghost" size="icon" onClick={handleDismiss} className="h-8 w-8 flex-shrink-0">
             <X className="h-4 w-4" />
           </Button>
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">
-          Instale o app e tenha acesso offline, notificações e muito mais.
-        </p>
+        <div className="space-y-2">
+          <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-muted/50 transition-smooth">
+            <Smartphone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-foreground">Acesso Offline</p>
+              <p className="text-xs text-muted-foreground">Use mesmo sem internet</p>
+            </div>
+          </div>
+        </div>
       </CardContent>
-      <CardFooter className="flex gap-2">
-        <Button onClick={handleInstall} className="flex-1">
-          Instalar
+      <CardFooter className="flex gap-2 pt-0">
+        <Button
+          onClick={handleInstall}
+          className="flex-1 rounded-xl h-12 font-semibold shadow-soft hover:shadow-float transition-smooth"
+        >
+          Instalar Agora
         </Button>
-        <Button onClick={handleDismiss} variant="outline">
+        <Button onClick={handleDismiss} variant="outline" className="rounded-xl h-12 font-semibold">
           Depois
         </Button>
       </CardFooter>

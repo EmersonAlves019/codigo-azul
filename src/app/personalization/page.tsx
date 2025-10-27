@@ -10,12 +10,14 @@ import { Input } from '@/components/ui/input'
 import { Sparkles, Heart, Brain, Droplet } from 'lucide-react'
 import { usePersonalization } from '@/hooks/usePersonalization'
 import { useToast } from '@/hooks/use-toast'
+import { NotificationOnboardingModal } from '@/components/notifications/notification-onboarding-modal'
 
 export default function Personalization() {
   const router = useRouter()
   const { toast } = useToast()
   const { savePersonalization, calculatePersonalization } = usePersonalization()
   const [step, setStep] = useState(1)
+  const [showNotificationModal, setShowNotificationModal] = useState(false)
   const [answers, setAnswers] = useState({
     objetivo: '',
     outroObjetivo: '',
@@ -67,9 +69,22 @@ export default function Personalization() {
       description: 'Sua jornada azul foi adaptada especialmente para você',
     })
 
+    // Verificar se já mostramos o onboarding de notificações
+    const hasShownNotificationOnboarding = localStorage.getItem('notification-onboarding-shown')
+
     setTimeout(() => {
-      router.push('/dashboard')
+      if (!hasShownNotificationOnboarding) {
+        setShowNotificationModal(true)
+      } else {
+        router.push('/dashboard')
+      }
     }, 1500)
+  }
+
+  const handleNotificationModalClose = () => {
+    localStorage.setItem('notification-onboarding-shown', 'true')
+    localStorage.setItem('onboarding-completed', 'true')
+    router.push('/dashboard')
   }
 
   const questions = [
@@ -229,6 +244,8 @@ export default function Personalization() {
           <p className="text-sm text-muted-foreground">💙 Cada resposta nos ajuda a criar a melhor jornada para você</p>
         </div>
       </div>
+
+      <NotificationOnboardingModal isOpen={showNotificationModal} onClose={handleNotificationModalClose} />
     </div>
   )
 }
